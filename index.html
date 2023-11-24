@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+        window.addEventListener('load', (event) => {
+            console.log('The page has fully loaded');
+        });
+
+        function copyTextToClipboard(text) {
+        if (!navigator.clipboard) {
+            fallbackCopyTextToClipboard(text);
+            return;
+        }
+        navigator.clipboard.writeText(text).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+        }
+
+        function gameinit_host() {
+            //this gets the URL
+            var URL = window.location.href;
+            //this creates the unique ID
+            var id = "uid" + Math.random().toString(16).slice(2);
+            //copy the full URL with id to clipboard
+            var nickname = prompt("Enter your nickname:");
+            URL=URL+"main.php?URL="+id+"&nickname="+nickname;
+            copyTextToClipboard(URL);
+            document.getElementById('URL').value = URL;
+            document.addEventListener('DOMContentLoaded', function() {
+            // This function is executed when the page has finished loading
+
+            // Make a GET request using the Fetch API
+            fetch(document.getElementById('URL').value)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle the data received from the GET request
+                    console.log('Data received:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        }
+        //http://localhost/chatbackbone/main?URL=uid54dd1213c6679&nickname=qqqq
+    </script>
+    
+  </head>
+	<body>
+            <button onclick="gameinit_host();" id="start">Start 2 player game by URL</button>    
+            <input type="text" name="URL" id="URL" required>
+  </body>
+</html> 
