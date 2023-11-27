@@ -27,7 +27,8 @@
             var nickname = prompt("Enter your nickname:");
             URL=URL+"main.php?URL="+id+"&nickname="+nickname;
             copyTextToClipboard(URL);
-            document.getElementById('URL').value = URL;
+            document.getElementById('hostURL').value = URL+"&host_or_client=host";
+            document.getElementById('clientURL').value = URL+"&host_or_client=client";
             document.addEventListener('DOMContentLoaded', function() {
             // This function is executed when the page has finished loading
 
@@ -54,6 +55,7 @@
   </head>
 	<body>
             <button onclick="gameinit_host();" id="start">Start 2 player game by URL</button>    
-            <input type="text" name="URL" id="URL" required>
+            <input type="text" name="hostURL" id="hostURL" required>
+            <input type="text" name="clientURL" id="clientURL" required>
   </body>
 </html> 

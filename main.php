@@ -66,7 +66,7 @@
 
                 // Send the data using AJAX
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'http://localhost/chatbackbone/sender.php', true);
+                xhr.open('POST', 'http://localhost/chatbackbone/sender.php?URL=<?php print $_GET['URL']."&host_or_client=".$_GET['host_or_client']?>', true);
                 xhr.onload = function () {
                     if (xhr.status === 200) {
 						document.getElementById('response').innerHTML += xhr.responseText;
@@ -79,8 +79,7 @@
 				var xhr2 = new XMLHttpRequest();
 
 				// Configure it: GET-request for the URL /process.php
-				xhr2.open('GET', 'http://localhost/chatbackbone/receiver.php?receiver='+document.getElementById('from').value, true);
-
+				xhr2.open('GET', 'http://localhost/chatbackbone/receiver.php?receiver=?URL=<?php print $_GET['URL']."&host_or_client=".$_GET['host_or_client']?>', true);
 				// Set up a function that will be called when the request is successfully completed
 				xhr2.onload = function () {
 					if (xhr2.status === 200) {
@@ -91,20 +90,20 @@
 					}
 				};
             }
-            function keep-alive() {
+            function keep_alive() {
                 var xhr = new XMLHttpRequest();
-
                 // Configure it: POST-request for the URL /your_php_script.php
-                xhr.open('GET', http://localhost/chatbackbone/receiver.php?receiver='+document.getElementById('from').value, true);, true);
-
+                xhr.open('GET', 'http://localhost/chatbackbone/receiver.php?receiver=?URL=<?php print $_GET['URL']."&host_or_client=".$_GET['host_or_client']."&keep_alive_check=True"?>', true);
                 // Set up a function that will be called when the request is successfully completed
                 xhr.onload = function () {
-                    if (xhr.status === 200) {
+                    if (xhr.status === 200) { 
                         // Update the content of the 'response' div with the received data
                         var is_alive=false;
-                        if (str_contains(xhr.responseText, "Session is alive!")) {
+                        if (str_contains(xhr.responseText, "Unix time now:")) {//<?php //echo 'Unix time now:'. time();?>
                             is_alive=true;
-                            keep_alive_count=0;
+                            if(str.split('now:')[1]-Date.now()>20) {//str.split('now:')[1] gets everything to the right of now;
+                                is_alive=false;
+                            }
                         }
 
                         if(!is_alive) {
@@ -113,15 +112,15 @@
                                 alert("chat session ended by timeout of disconnection, keep_alive_count:"+keep_alive_count)
                             }
                         }
+                        document.getElementById('response').innerHTML += xhr.responseText;
                     }
                 };
 
-            }
+            
 				var xhr2 = new XMLHttpRequest();
 
 				// Configure it: GET-request for the URL /process.php
-				xhr2.open('GET', 'http://localhost/chatbackbone/receiver.php?receiver='+document.getElementById('from').value, true);
-
+				xhr2.open('GET', 'http://localhost/chatbackbone/receiver.php?receiver=?URL=<?php print $_GET['URL']."&host_or_client=".$_GET['host_or_client']."&keep_alive_check=True"?>', true);
 				// Set up a function that will be called when the request is successfully completed
 				xhr2.onload = function () {
 					if (xhr2.status === 200) {
@@ -135,8 +134,7 @@
 				xhr2.send(); // Move this line outside of the xhr.onload callback
 			}
 			// Set up the timer to call the function every 5000 milliseconds (5 seconds)
-			setInterval(fetchDataAndUpdateDiv;keep-alive, 5000);
-
+			setInterval(fetchDataAndUpdateDiv,keep_alive, 5000);
         });
     </script>
 </head>
